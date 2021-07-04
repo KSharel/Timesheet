@@ -5,7 +5,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import com.timesheet.demo.model.User;
 
-@RepositoryRestResource(collectionResourceRel = "users",path = "users")
+@RepositoryRestResource(collectionResourceRel = "users",path = "usersRes")
 public interface UserRepo extends JpaRepository<User, Integer>{
-
+	
 }

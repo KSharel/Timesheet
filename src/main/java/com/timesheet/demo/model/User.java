@@ -1,8 +1,11 @@
 package com.timesheet.demo.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class User {
@@ -12,6 +15,8 @@ public class User {
 	private String uname;
 	private String dept;
 	private String role;
+	@ManyToMany
+	private List<Project> projects;
 	public int getUid() {
 		return uid;
 	}
@@ -35,6 +40,13 @@ public class User {
 	}
 	public void setRole(String role) {
 		this.role = role;
+	}
+	
+	public List<Project> getProjects() {
+		return projects;
+	}
+	public void setProjects(List<Project> projects) {
+		this.projects = projects;
 	}
 	@Override
 	public String toString() {
