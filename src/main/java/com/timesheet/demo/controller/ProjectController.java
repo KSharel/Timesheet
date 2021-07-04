@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ public class ProjectController {
 		
 		System.out.println("role is "+role);
 		if(role==null) {
-			return "Roll is null";
+			return "Role is null";
 		}
 		
 		if(role.equals("Admin"))
@@ -44,11 +45,60 @@ public class ProjectController {
 	
 	@RequestMapping(method = RequestMethod.GET)
 	public List<Project> getAllProjects(){
-		return prepo.findAll();
+		
+			String role= request.getHeader("role");
+		
+		System.out.println("role is "+role);
+		if(role==null) {
+			return null;
+		}
+		
+		if(role.equals("Admin"))
+		{
+			return prepo.findAll();
+		}
+		else {
+			return null;
+		}
 	}
 	
 	@RequestMapping(value = "/{pid}",method = RequestMethod.GET)
 	public Project getProject(@PathVariable("pid") Integer pid){
-		return prepo.findById(pid).get();
+		String role= request.getHeader("role");
+		
+		System.out.println("role is "+role);
+		if(role==null) {
+			return null;
+		}
+		
+		if(role.equals("Admin"))
+		{
+			return prepo.findById(pid).get();
+		}
+		else {
+			return null;
+		}
 	}
+
+	@DeleteMapping(value = "/{pid}")
+	public Project deleteProject(@PathVariable("pid") Integer pid) {
+		String role= request.getHeader("role");
+		
+		System.out.println("role is "+role);
+		if(role==null) {
+			return null;
+		}
+		
+		if(role.equals("Admin"))
+		{
+			Project project = prepo.findById(pid).get();
+			prepo.deleteById(pid);
+			return project;
+		}
+		else {
+			return null;
+		}	
+	}
+	
+
 }
