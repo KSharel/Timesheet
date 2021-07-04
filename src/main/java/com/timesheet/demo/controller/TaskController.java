@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.timesheet.demo.model.User;
-import com.timesheet.demo.repository.UserRepo;
+import com.timesheet.demo.model.Task;
+import com.timesheet.demo.repository.TasksRepo;
 
 @RestController
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/tasks")
+public class TaskController {
 	@Autowired
     private HttpServletRequest request;
 	
 	@Autowired
-	private UserRepo repo;
+	private TasksRepo trepo;
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public String addUser(@RequestBody User user){
+	public String addTask(@RequestBody Task task){
 		String role= request.getHeader("role");
 		
 		System.out.println("role is "+role);
@@ -35,35 +35,17 @@ public class UserController {
 		
 		if(role.equals("Admin"))
 		{
-			repo.save(user);
+			trepo.save(task);
 		}
 		else {
 			return "401 Unauthorized";
 		}
-		return user.toString();
-	}
-	
-	@RequestMapping(method = RequestMethod.PUT)
-	public String UpdateUser(@RequestBody User user){
-		String role= request.getHeader("role");
-		
-		System.out.println("role is "+role);
-		if(role==null) {
-			return "Role is null";
-		}
-		
-		if(role.equals("Admin"))
-		{
-			repo.save(user);
-		}
-		else {
-			return "401 Unauthorized";
-		}
-		return user.toString();
+		return task.toString();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public List<User> getAllUser(){
+	public List<Task> getAllTaks(){
+		
 		String role= request.getHeader("role");
 		
 		System.out.println("role is "+role);
@@ -73,15 +55,15 @@ public class UserController {
 		
 		if(role.equals("Admin"))
 		{
-			return repo.findAll();
+			return trepo.findAll();
 		}
 		else {
 			return null;
 		}
 	}
 	
-	@RequestMapping(value = "/{uid}",method = RequestMethod.GET)
-	public User getUser(@PathVariable("uid") Integer id){
+	@RequestMapping(value = "/{tid}",method = RequestMethod.GET)
+	public Task getTask(@PathVariable("tid") Integer tid){
 		String role= request.getHeader("role");
 		
 		System.out.println("role is "+role);
@@ -91,15 +73,15 @@ public class UserController {
 		
 		if(role.equals("Admin"))
 		{
-			return repo.findById(id).get();
+			return trepo.findById(tid).get();
 		}
 		else {
 			return null;
-		}	
+		}
 	}
 
-	@DeleteMapping(value = "/{uid}")
-	public User deleteUser(@PathVariable("uid") Integer id) {
+	@DeleteMapping(value = "/{tid}")
+	public Task deleteTask(@PathVariable("tid") Integer tid) {
 		String role= request.getHeader("role");
 		
 		System.out.println("role is "+role);
@@ -109,9 +91,9 @@ public class UserController {
 		
 		if(role.equals("Admin"))
 		{
-			User user = repo.findById(id).get();
-			repo.deleteById(id);
-			return user;
+			Task task = trepo.findById(tid).get();
+			trepo.deleteById(tid);
+			return task;
 		}
 		else {
 			return null;
